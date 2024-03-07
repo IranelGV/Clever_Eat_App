@@ -30,7 +30,7 @@ from fuzzywuzzy import fuzz, process
 import os
 
 api_key = os.getenv("OPENAI_API_KEY")
-api_key = "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"
+api_key = "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"
 
 #Ira kEY
 #api_key = "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"
@@ -101,7 +101,7 @@ def get_activity_level():
 
 def get_user_goal():
     # Define a list of correct spellings or keywords:
-    user_goal = ['loss weight', 'maintain weight', 'gain weight']
+    user_goal = ['lose weight', 'maintain weight', 'gain weight']
     
     # Use st.selectbox to provide valid options as suggestions
     user_goals_input = st.selectbox("What is your Goal:", user_goal)
@@ -165,7 +165,7 @@ def get_user_inputs():
     }
     
     TDEE_goals = {
-        "loss weight": 0.85,
+        "lose weight": 0.85,
         "maintain weight": 1,
         "gain weight": 1.1
     }

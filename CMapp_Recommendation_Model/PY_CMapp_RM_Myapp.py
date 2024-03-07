@@ -22,7 +22,7 @@ from PIL import Image
 from IPython.display import display
 from fuzzywuzzy import fuzz, process
 
-
+scaler = StandardScaler()
 #get_ipython().run_line_magic('matplotlib', 'inline')
 
 df_final= pd.read_csv(r"C:\Users\espan\OneDrive\Documents\GitHub\Clever_Meal_App\CMapp_Recommendation_Model\output.csv")
@@ -283,30 +283,39 @@ def TDEE_calculator_per_meal():
 
 
 def recipe_recommendation():
+    
+    # NOTE IN THIS USER PARAMETOR WE DONT HAVE THE CLUSTER!!!!
     df_user_inputs_parameter = TDEE_calculator_per_meal()
 
+
     # Scaling the user inputs DataFrame
-    scaler = StandardScaler()
-    scaler.fit(df_final)
+    
+    
+    # NOT FIT THE USER INPUTS!!!! 👀👀👀👀👀👀👀👀👀👀👀👀
+    
+    scaler.transform(df_user_inputs_parameter)
     user_inputs_scaled = scaler.transform(df_user_inputs_parameter)
 
     # Apply KMeans prediction to user_inputs_scaled
-    user_cluster = loaded_kmeans.predict(user_inputs_scaled)
+    user_cluster = kmeans.predict(user_inputs_scaled)
+    
 
     # Filter recommended recipe based on predicted cluster
+
     recommended_recipe_from_cluster = df_final[df_final['cluster'] == user_cluster[0]]
 
     # Select a random recipe from recommended recipes
     recommended_recipe = recommended_recipe_from_cluster.sample(n=1)
-
-
     
-    return recommended_recipe
+    # take the specific recipe
+    dish_recommended = recommended_recipe_from_cluster["Recipe_name"].values[0]
+    
+    return recommended_recipe, dish_recommended
 
 
 #def recipe_name():
     
-recipe_name = recipe_recommendation().iloc[0]['Recipe_name']
+#recipe_name = recipe_recommendation().iloc[0]['Recipe_name']
     
     
     #return  recipe_name
@@ -342,7 +351,9 @@ def main():
     st.write(recommended_recipe)
     #############################
 
-   
+    # Display the recommended Dish
+    st.subheader("Recommended Dish based on your Nutrition Goals")
+    st.write(dish_recommended)
     
 
     
@@ -352,8 +363,8 @@ def main():
     
 
     # Display the recommended Dish
-    st.subheader("Recommended Dish based on your Nutrition Goals")
-    st.write(recipe_name)
+    #st.subheader("Recommended Dish based on your Nutrition Goals")
+    #st.write(dish_recommended)
 
     #############################
     #st.subheader("Recommended Dish with the Macronutrients Distribution")
